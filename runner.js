@@ -14,6 +14,14 @@ driver.get('http://127.0.0.1:4096').then(function() {
 
   // Wait for tests to complete.
   var pollTimer = setInterval(function() {
+    // Output logs while the tests are running.
+    driver.manage().logs().get('browser').then(function (log) {
+      for (var index in log) {
+        var entry = log[index];
+        console.log("    [" + entry.level.name + "] " + entry.message);
+      }
+    });
+
     driver.executeScript(function() {
       if (typeof TEST_STATUS !== 'undefined')
         return TEST_STATUS.DONE;
@@ -29,6 +37,7 @@ driver.get('http://127.0.0.1:4096').then(function() {
           }
           return 0;
         }).then(function (failures) {
+          // Output final logs.
           driver.manage().logs().get('browser').then(function (log) {
             for (var index in log) {
               var entry = log[index];
