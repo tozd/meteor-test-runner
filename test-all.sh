@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Packages with tests.
-PACKAGES=$(grep -Prl 'Package\.(onTest|on_test)' packages | grep -Po 'packages/\K.*(?=/)' | sort -u)
+# Packages with tests. To ignore a package, place // NOTEST after the onTest definition.
+PACKAGES=$(grep -Prl 'Package\.(onTest|on_test)(?!.*// NOTEST)' packages | grep -Po 'packages/\K.*(?=/)' | sort -u)
 
 # Move to the correct directory.
 cd "$( dirname "${BASH_SOURCE[0]}" )/.."
