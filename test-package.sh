@@ -15,8 +15,7 @@ LOG_DIR="${LOG_DIR}/${PACKAGE}"
 rm -rf ${LOG_DIR}
 mkdir -p ${LOG_DIR}
 
-# Move to the correct directory.
-cd "$( dirname "${BASH_SOURCE[0]}" )/.."
+SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
 
 run_meteor()
 {
@@ -57,7 +56,7 @@ done
 
 # Run the test.
 echo "  > Running the test runner..."
-node tests/runner.js
+node ${SCRIPT_DIR}/runner.js
 RESULT=$?
 
 # Close the file descriptor.
