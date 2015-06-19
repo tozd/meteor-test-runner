@@ -1,7 +1,14 @@
 #!/bin/bash
 
+# On Mac OS X GNU grep is ggrep.
+if hash ggrep 2>/dev/null; then
+  GREP='ggrep'
+else
+  GREP='grep'
+fi
+
 # Packages with tests. To ignore a package, place // NOTEST after the onTest definition.
-PACKAGES=$(grep -Prl 'Package\.(onTest|on_test)(?!.*// NOTEST)' packages | grep -Po 'packages/\K.*(?=/)' | sort -u)
+PACKAGES=$( $GREP -Prl 'Package\.(onTest|on_test)(?!.*// NOTEST)' packages | $GREP -Po 'packages/\K.*(?=/)' | sort -u )
 
 SCRIPT_DIR="$( dirname "${BASH_SOURCE[0]}" )"
 
