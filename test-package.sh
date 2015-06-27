@@ -54,6 +54,9 @@ while true; do
   wait 2>/dev/null
 done
 
+# Drain file descriptor in the background. Otherwise the buffer may fill up and block I/O.
+{ while read line; do true; done <&3; } &
+
 # Run the test.
 echo "  > Running the test runner..."
 node ${SCRIPT_DIR}/runner.js
