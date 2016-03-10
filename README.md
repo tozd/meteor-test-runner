@@ -15,7 +15,7 @@ app into multiple packages under `packages/` directory.
 In order to run the test suite locally, first install the required Node.js packages:
 
 ```
-$ npm install selenium-webdriver mkdirp
+$ npm install selenium-webdriver@2.47.0 mkdirp
 ```
 
 Then you need to have the ChromeDriver installed and in your path. On Ubuntu you can do the following:
