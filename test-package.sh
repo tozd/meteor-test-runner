@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PACKAGE="$1"
+export PACKAGE="$1"
 if [ -z "${PACKAGE}" ]; then
   echo "ERROR: No package specified."
   exit 1
