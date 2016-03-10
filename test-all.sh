@@ -15,10 +15,24 @@ SCRIPT_DIR="$( dirname "${BASH_SOURCE[0]}" )"
 PACKAGE_DIRS=${PACKAGE_DIRS:-packages}
 export PACKAGE_DIRS
 
+if [ -n "$CIRCLE_NODE_TOTAL" ] ; then
+  i=0
+  PACKAGES_TO_TEST=()
+  for pkg in ${PACKAGES}; do
+    if [ $(($i % $CIRCLE_NODE_TOTAL)) -eq $CIRCLE_NODE_INDEX ]
+    then
+      PACKAGES_TO_TEST+=" ${pkg}"
+    fi
+    ((i=i+1))
+  done
+else
+  PACKAGES_TO_TEST="$PACKAGES"
+fi
+
 # Perform tests.
 TESTS_FAILED=0
 PACKAGES_FAILED=""
-for pkg in ${PACKAGES}; do
+for pkg in ${PACKAGES_TO_TEST}; do
   echo ">>> Testing package '${pkg}'..."
   "${SCRIPT_DIR}/test-package.sh" packages/${pkg} || {
     echo "ERROR: Tests for package '${pkg}' failed."
