@@ -7,7 +7,7 @@ if [ -z "${PACKAGE}" ]; then
 fi
 
 LOG_DIR="/tmp/meteor-test-runner"
-# CirleCI.
+# CircleCI.
 if [ -n "${CIRCLE_ARTIFACTS}" ]; then
   LOG_DIR="${CIRCLE_ARTIFACTS}"
 fi
