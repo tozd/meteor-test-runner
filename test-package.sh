@@ -7,7 +7,7 @@ if [ -z "${PACKAGE}" ]; then
 fi
 
 LOG_DIR="/tmp/meteor-test-runner"
-# CirleCI.
+# CircleCI.
 if [ -n "${CIRCLE_ARTIFACTS}" ]; then
   LOG_DIR="${CIRCLE_ARTIFACTS}"
 fi
@@ -20,9 +20,11 @@ SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
 run_meteor()
 {
   # Keep a copy of Meteor output in a log file.
-  ${METEOR_COMMAND:-meteor} test-packages --once --driver-package 'test-in-console' -p 4096 ${PACKAGE} | tee ${LOG_DIR}/meteor.log
+  ${METEOR_COMMAND:-meteor} test-packages --once --driver-package 'test-in-console' -p 4096 ${PACKAGE} 2>&1 | tee "${LOG_DIR}/meteor.log"
+  return ${PIPESTATUS[0]}
 }
 
+TRY_COUNT=0
 while true; do
   # Spawn the test process.
   echo "  > Spawning test process..."
@@ -31,7 +33,7 @@ while true; do
   # Wait until Meteor reports that it is 'listening'.
   echo "  > Waiting for Meteor to start..."
   METEOR_STARTED=0
-  while read line; do
+  while read -t 120 -r line; do
      case "$line" in
      *listening*)
         echo "  > Meteor seems ready, going to run tests in a moment."
@@ -48,10 +50,23 @@ while true; do
     break
   fi
 
-  echo "  ? Failed to start Meteor, retrying."
+  TRY_COUNT=$((TRY_COUNT+1))
+
+  if (("$TRY_COUNT" >= 5)); then
+    echo "  ? Failed to start Meteor after $TRY_COUNT tries, exiting."
+  else
+    echo "  ? Failed to start Meteor, retrying."
+  fi
+
   exec 3<&-
   killall node 2>/dev/null
   wait 2>/dev/null
+
+  if (("$TRY_COUNT" >= 5)); then
+    echo "  ?  The last Meteor log (saved as '${LOG_DIR}/meteor.log') follows:"
+    cat "${LOG_DIR}/meteor.log"
+    exit 1
+  fi
 done
 
 # Drain file descriptor in the background. Otherwise the buffer may fill up and block I/O.
