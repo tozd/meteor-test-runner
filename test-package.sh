@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PACKAGE="$1"
+export PACKAGE="$1"
 if [ -z "${PACKAGE}" ]; then
   echo "ERROR: No package specified."
   exit 1
@@ -20,7 +20,7 @@ SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
 run_meteor()
 {
   # Keep a copy of Meteor output in a log file.
-  meteor test-packages --once --driver-package 'test-in-console' -p 4096 ${PACKAGE} | tee ${LOG_DIR}/meteor.log
+  ${METEOR_COMMAND:-meteor} test-packages --once --driver-package 'test-in-console' -p 4096 ${PACKAGE} | tee ${LOG_DIR}/meteor.log
 }
 
 while true; do
