@@ -6,12 +6,14 @@ if [ -z "${PACKAGE}" ]; then
   exit 1
 fi
 
+METEOR_COMMAND="${METEOR_COMMAND:-meteor}"
+
 LOG_DIR="/tmp/meteor-test-runner"
 # CircleCI.
 if [ -n "${CIRCLE_ARTIFACTS}" ]; then
   LOG_DIR="${CIRCLE_ARTIFACTS}"
 fi
-LOG_DIR="${LOG_DIR}/${PACKAGE}"
+LOG_DIR="${LOG_DIR}/${METEOR_COMMAND//[^a-zA-Z0-9]}/${PACKAGE}"
 rm -rf ${LOG_DIR}
 mkdir -p ${LOG_DIR}
 
@@ -20,7 +22,7 @@ SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
 run_meteor()
 {
   # Keep a copy of Meteor output in a log file.
-  ${METEOR_COMMAND:-meteor} test-packages --once --driver-package 'test-in-console' -p 4096 ${PACKAGE} 2>&1 | tee "${LOG_DIR}/meteor.log"
+  "$METEOR_COMMAND" test-packages --once --driver-package 'test-in-console' -p 4096 ${PACKAGE} 2>&1 | tee "${LOG_DIR}/meteor.log"
   return ${PIPESTATUS[0]}
 }
 
