@@ -8,6 +8,8 @@ fi
 
 METEOR_COMMAND="${METEOR_COMMAND:-meteor}"
 
+METEOR_TIMEOUT=300
+
 LOG_DIR="/tmp/meteor-test-runner"
 # CircleCI.
 if [ -n "${CIRCLE_ARTIFACTS}" ]; then
@@ -35,7 +37,7 @@ while true; do
   # Wait until Meteor reports that it is 'listening'.
   echo "  > Waiting for Meteor to start..."
   METEOR_STARTED=0
-  while read -t 120 -r line; do
+  while read -t $METEOR_TIMEOUT -r line; do
      case "$line" in
      *listening*)
         echo "  > Meteor seems ready, going to run tests in a moment."
