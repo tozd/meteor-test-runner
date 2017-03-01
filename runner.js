@@ -116,4 +116,7 @@ driver.get('http://127.0.0.1:4096/xunit').then(function() {
       }
     });
   }, 500);
+}, function (reason) {
+  console.error(reason);
+  process.exit(1);
 });
