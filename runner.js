@@ -18,9 +18,18 @@ var driver = new chrome.Driver(options);
 
 var xunitEntries = [];
 
+function unescapeMessage(string) {
+  try {
+    return JSON.parse('"' + string);
+  }
+  catch (e) {
+    return string;
+  }
+}
+
 function magicEntry(facility, message) {
   if (facility === 'xunit' || facility === '#xunit') {
-    xunitEntries.push(message);
+    xunitEntries.push(unescapeMessage(message));
   }
   else if (facility === 'state' || facility === '#state') {
     // Ignoring.
