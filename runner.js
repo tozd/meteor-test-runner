@@ -19,10 +19,10 @@ var driver = new chrome.Driver(options);
 var xunitEntries = [];
 
 function magicEntry(facility, message) {
-  if (facility === 'xunit') {
+  if (facility === 'xunit' || facility === '#xunit') {
     xunitEntries.push(message);
   }
-  else if (facility === 'state') {
+  else if (facility === 'state' || facility === '#state') {
     // Ignoring.
   }
   else {
