@@ -72,7 +72,7 @@ function storeResult() {
   if (!process.env.CIRCLE_TEST_REPORTS) return;
 
   var meteor = (process.env.METEOR_COMMAND || 'meteor').replace(/[^a-zA-Z0-9]/g, '');
-  var baseDirectory = path.join(process.env.CIRCLE_TEST_REPORTS, meteor, process.env.PACKAGE || 'unknown');
+  var baseDirectory = path.join(process.env.CIRCLE_TEST_REPORTS, process.env.XUNIT_PREFIX || '', meteor, process.env.PACKAGE || 'unknown');
   var xunitOutputFile = path.join(baseDirectory, 'test-results.xml');
   console.log("  > Writing xunit output to: " + xunitOutputFile);
   mkdirp.sync(baseDirectory);
