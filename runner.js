@@ -13,6 +13,9 @@ var options = new chrome.Options();
 var logOptions = new webdriver.logging.Preferences();
 logOptions.setLevel('browser', webdriver.logging.Level.ALL);
 options.setLoggingPrefs(logOptions);
+options.addArguments('disable-setuid-sandbox');
+options.addArguments('no-sandbox');
+options.addArguments('allow-insecure-localhost');
 
 var driver = new chrome.Driver(options);
 
