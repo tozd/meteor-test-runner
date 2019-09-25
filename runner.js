@@ -16,6 +16,9 @@ options.setLoggingPrefs(logOptions);
 options.addArguments('disable-setuid-sandbox');
 options.addArguments('no-sandbox');
 options.addArguments('allow-insecure-localhost');
+options.addArguments('disable-gpu');
+options.addArguments('disable-dev-shm-usage');
+options.addArguments('headless');
 
 var driver = new chrome.Driver(options);
 
