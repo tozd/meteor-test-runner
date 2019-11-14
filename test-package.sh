@@ -24,7 +24,7 @@ SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
 run_meteor()
 {
   # Keep a copy of Meteor output in a log file.
-  "$METEOR_COMMAND" test-packages --once --driver-package 'test-in-console' -p 4096 ${PACKAGE} 2>&1 | tee "${LOG_DIR}/meteor.log"
+  "$METEOR_COMMAND" test-packages --once --driver-package 'test-in-console' -p 4096 ${METEOR_COMMAND_EXTRA_ARGS} ${PACKAGE} 2>&1 | tee "${LOG_DIR}/meteor.log"
   return ${PIPESTATUS[0]}
 }
 
